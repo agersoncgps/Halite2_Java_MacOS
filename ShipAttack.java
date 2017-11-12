@@ -20,24 +20,6 @@ public class ShipAttack {
 
         ArrayList<Move> moveList = new ArrayList<>();
 
-        Log.log("\nPlanets:");
-        for (Planet planet : gameMap.getAllPlanets().values()) {
-        	Log.log(planet.toString());
-        }
-
-        Log.log("\nMy Ships:");
-        for (Ship ship : gameMap.getMyPlayer().getShips().values()) {
-        	Log.log(ship.toString());
-        }
-
-        Log.log("\nEnemy Ships:");
-        for (Ship ship : gameMap.getAllPlayers().get(1).getShips().values()) {
-        	Log.log(ship.toString());
-        }
-
-        
-        
-
         while (true) {
             moveList.clear();
             networking.updateMap(gameMap);
