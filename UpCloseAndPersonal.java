@@ -33,10 +33,11 @@ public class UpCloseAndPersonal {
                 Map<Double, Entity> entitiesByDistance = gameMap.nearbyEntitiesByDistance(ship);
 
                 for (Map.Entry<Double, Entity> entry : entitiesByDistance.entrySet()) {
-
+                    Log.log("Key : " + entry.getKey() + " Value : " + entry.getValue());
                     if (entry.getValue() instanceof Planet) {
                         Planet planet = (Planet)entry.getValue();
                         if (planet.isOwned()) {
+                        //if (planet.getOwner() == gameMap.getMyPlayerId()) {
                             continue;
                         }
 
