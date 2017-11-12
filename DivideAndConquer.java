@@ -1,15 +1,19 @@
 /*
-We can sort the planets by distance before iterating over them. The faster we can get to a planet and dock,
-the faster we’ll get new ships to command. You can get the distance from each ship to each map entity,
-sort by distance, then find which of the closest entities is a planet.
+Rather than having all your ships travel to the same single planet, you could diversify and
+send ships to different planets. Without diversifying, if the single planet you’re attempting to
+conquer has already been conquered by an enemy in the midst of your voyage, you will have wasted
+many turns. But with this strategy, you have a better chance of landing on a vacant planet.
+You can get all the planets, get all the ships, and then assign them to each other in the map’s
+default order on a round robin basis.
 */
 
 import hlt.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
-public class UpCloseAndPersonal {
+public class DivideAndConquer {
 
     public static void main(String[] args) {
         Networking networking = new Networking();
@@ -32,6 +36,15 @@ public class UpCloseAndPersonal {
             moveList.clear();
             networking.updateMap(gameMap);
 
+            Collection shipCollection = gameMap.getMyPlayer().getShips().values();
+            ArrayList<Ship> ships = new ArrayList<Ship>(shipCollection);
+            
+            Collection planetCollection = gameMap.getAllPlanets().values();
+            ArrayList<Planet> planets = new ArrayList<Planet>(planetCollection);
+
+            Log.log(ships.get(new Integer(0)).getClosestPoint(planets.get(new Integer(0))));
+            
+            /*
             for (Ship ship : gameMap.getMyPlayer().getShips().values()) {
                 if (ship.getDockingStatus() == Ship.DockingStatus.Docked) {
                     continue;
@@ -61,6 +74,8 @@ public class UpCloseAndPersonal {
                     }
                 }
             }
+            */
+
             Networking.sendMoves(moveList);
         }
     }

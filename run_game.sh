@@ -1,5 +1,5 @@
 #!/bin/sh
 
-javac UpCloseAndPersonal.java
+javac DivideAndConquer.java
 javac BasicBotOrigonal.java
-./halite -d "240 160" "java UpCloseAndPersonal" "java BasicBotOrigonal"
+./halite -d "240 160" "java DivideAndConquer" "java BasicBotOrigonal"
