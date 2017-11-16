@@ -42,21 +42,24 @@ public class DivideAndConquer {
             Collection planetCollection = gameMap.getAllPlanets().values();
             ArrayList<Planet> planets = new ArrayList<Planet>(planetCollection);
 
-            Log.log(ships.get(new Integer(0)).getClosestPoint(planets.get(new Integer(0))));
+            //Log.log();
             
-            /*
-            for (Ship ship : gameMap.getMyPlayer().getShips().values()) {
-                if (ship.getDockingStatus() == Ship.DockingStatus.Docked) {
-                    continue;
-                }
+            for (int current = 0; current < ships.size(); current++) {
+                //Position cloestPoint = ships.get(new Integer(current)).getClosestPoint(planets.get(new Integer(current%planets.size())));
+                
+                Ship ship = ships.get(new Integer(current));
+
                 Map<Double, Entity> entitiesByDistance = gameMap.nearbyEntitiesByDistance(ship);
 
                 for (Map.Entry<Double, Entity> entry : entitiesByDistance.entrySet()) {
                     Log.log("Key : " + entry.getKey() + " Value : " + entry.getValue());
                     if (entry.getValue() instanceof Planet) {
                         Planet planet = (Planet)entry.getValue();
-                        if (planet.isOwned()) {
-                        //if (planet.getOwner() == gameMap.getMyPlayerId()) {
+                        //if (planet.isOwned()) {
+                        if (planet.isOwned() && planet.getOwner() != gameMap.getMyPlayerId()) {
+                            continue;
+                        }
+                        if (planet.isFull()) {
                             continue;
                         }
 
@@ -65,7 +68,7 @@ public class DivideAndConquer {
                             break;
                         }
 
-                        ThrustMove newThrustMove = Navigation.navigateShipToDock(gameMap, ship, planet, Constants.MAX_SPEED/2);
+                        ThrustMove newThrustMove = Navigation.navigateShipToDock(gameMap, ship, planet, Constants.MAX_SPEED/4);
                         if (newThrustMove != null) {
                             moveList.add(newThrustMove);
                         }
@@ -74,7 +77,6 @@ public class DivideAndConquer {
                     }
                 }
             }
-            */
 
             Networking.sendMoves(moveList);
         }
