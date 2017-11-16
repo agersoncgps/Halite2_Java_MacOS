@@ -39,21 +39,20 @@ public class DivideAndConquer {
             Collection shipCollection = gameMap.getMyPlayer().getShips().values();
             ArrayList<Ship> ships = new ArrayList<Ship>(shipCollection);
             
+            Collection planetCollection = gameMap.getAllPlanets().values();
+            ArrayList<Planet> planets = new ArrayList<Planet>(planetCollection);
+
+            //Log.log();
             
-            Log.log("Ships Size: " + ships.size());
-            Log.log("++++++++++++++++++++++++++++");
             for (int current = 0; current < ships.size(); current++) {
-
                 //Position cloestPoint = ships.get(new Integer(current)).getClosestPoint(planets.get(new Integer(current%planets.size())));
-                 
-
+                
                 Ship ship = ships.get(new Integer(current));
-                Log.log(ship.toString());
+
                 Map<Double, Entity> entitiesByDistance = gameMap.nearbyEntitiesByDistance(ship);
 
-                ArrayList<Planet> planets = new ArrayList<Planet>();
                 for (Map.Entry<Double, Entity> entry : entitiesByDistance.entrySet()) {
-                    //Log.log("Key : " + entry.getKey() + " Value : " + entry.getValue());
+                    Log.log("Key : " + entry.getKey() + " Value : " + entry.getValue());
                     if (entry.getValue() instanceof Planet) {
                         Planet planet = (Planet)entry.getValue();
                         if (planet.isOwned() && planet.getOwner() != gameMap.getMyPlayerId()) {
@@ -62,29 +61,23 @@ public class DivideAndConquer {
                         if (planet.isFull()) {
                             continue;
                         }
-                        planets.add(planet);
+
+                        if (ship.canDock(planet)) {
+                           moveList.add(new DockMove(ship, planet));
+                            break;
+                        }
+
+                        ThrustMove newThrustMove = Navigation.navigateShipToDock(gameMap, ship, planet, Constants.MAX_SPEED/4);
+                        if (newThrustMove != null) {
+                            moveList.add(newThrustMove);
+                        }
+
+                        break;
                     }
                 }
-
-
-                Planet planet = planets.get(new Integer(current%planets.size()));
-                Log.log(planet.toString());
-                 
-                if (ship.canDock(planet)) {
-                   moveList.add(new DockMove(ship, planet));
-                   continue;
-                }
-
-                ThrustMove newThrustMove = Navigation.navigateShipToDock(gameMap, ship, planet, Constants.MAX_SPEED/4);
-                if (newThrustMove != null) {
-                    moveList.add(newThrustMove);
-                }
-                continue;
-               
             }
 
             Networking.sendMoves(moveList);
         }
-        
     }
 }
